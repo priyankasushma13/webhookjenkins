@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the Git repository
-                git ''
+                git 'https://github.com/priyankasushma13/webhookjenkins.git'
             }
         }
         stage('Build') {
