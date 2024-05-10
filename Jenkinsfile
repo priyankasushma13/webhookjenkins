@@ -22,7 +22,8 @@ pipeline {
                     // Step 4: Synchronize files with deployment directory
                     script {
                         try {
-                            sh 'sudo rsync -avz --delete . /var/www/html'
+                            sh 'rsync -avz --delete . /var/www/html'
+
                         } catch (Exception e) {
                             echo "Failed to sync files: ${e.message}"
                         }
