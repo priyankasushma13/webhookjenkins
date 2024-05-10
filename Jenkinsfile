@@ -34,7 +34,9 @@ pipeline {
                     sh 'ls -l /var/www/html'
 
                     // Step 6: Restart web server
-                    sh 'systemctl --quiet is-active httpd || { sudo systemctl start httpd; sleep 5; }'
+                    
+                    sh 'systemctl --quiet is-active httpd || systemctl start httpd'
+
 
                     // Step 7: Clean up working directory
                     sh 'rm -rf *'
