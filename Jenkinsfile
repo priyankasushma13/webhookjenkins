@@ -1,51 +1,45 @@
-
 pipeline {
     agent any
-    triggers {
-        // Define triggers outside of the pipeline block
-        githubPush() // Trigger the pipeline on GitHub push events
-    }
-
+    
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                // Step 1: Clone the repository
-                git branch: 'main', url: 'https://github.com/priyankasushma13/webhookjenkins.git'
+                // Checkout the code from the Git repository
+                git ''
             }
         }
-
-        stage('Deploy Web Application') {
+        stage('Build') {
             steps {
-                    // Step 3: Check if deployment directory exists
-                    sh 'test -d /var/www/html || mkdir -p /var/www/html'
-
-                    // Step 4: Synchronize files with deployment directory
-                    script {
-                        try {
-                            sh 'rsync -avz --delete . /var/www/html'
-
-                        } catch (Exception e) {
-                            echo "Failed to sync files: ${e.message}"
-                        }
-                    }
-
-                    // Step 5: Print contents of workspace and deployment directory
-                    sh 'ls -l'
-                    sh 'ls -l /var/www/html'
-
-                    // Step 6: Restart web server
-                    
-                    sh 'systemctl --quiet is-active httpd || systemctl start httpd'
-
-
-                    // Step 7: Clean up working directory
-                    sh 'rm -rf *'
-
-                    // Step 8: Check for errors
-                    catchError(buildResult: 'UNSTABLE', message: 'Failed to deploy web application') {
-                        sh 'echo "Deployment successful"'
-                    }
+                // Build your application (replace this with your build commands)
+                sh 'npm install'
+                sh 'npm run build'
             }
+        }
+        stage('Deploy') {
+            when {
+                // Execute this stage only when the branch is 'master'
+                branch 'master'
+            }
+            steps {
+                // Deploy your application (replace this with your deployment commands)
+                sh 'rsync -avz --delete . /var/www/html'
+                sh 'systemctl restart httpd'
+            }
+        }
+    }
+    
+    post {
+        success {
+            // Notification for successful build
+            slackSend channel: '#builds',
+                      color: 'good',
+                      message: "Build successful for ${env.BUILD_URL}"
+        }
+        failure {
+            // Notification for failed build
+            slackSend channel: '#builds',
+                      color: 'danger',
+                      message: "Build failed for ${env.BUILD_URL}"
         }
     }
 }
