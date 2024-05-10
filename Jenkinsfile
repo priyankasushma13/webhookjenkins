@@ -11,8 +11,11 @@ pipeline {
         stage('Build') {
             steps {
                 // Build your application (replace this with your build commands)
-                sh 'npm install'
-                sh 'npm run build'
+               steps {
+                sh 'python3 -m venv venv'
+                sh 'source venv/bin/activate'
+                sh 'pip3 install flask'
+            }
             }
         }
         stage('Deploy') {
