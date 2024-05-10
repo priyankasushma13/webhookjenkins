@@ -18,7 +18,7 @@ pipeline {
         stage('Deploy') {
             when {
                 // Execute this stage only when the branch is 'master'
-                branch 'master'
+                branch 'main'
             }
             steps {
                 // Deploy your application (replace this with your deployment commands)
