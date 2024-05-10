@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                git ''
+                git 'https://github.com/priyankasushma13/webhookjenkins.git'
                 sh 'python3 -m venv venv'
                 sh 'source venv/bin/activate'
                 sh 'pip3 install flask'
