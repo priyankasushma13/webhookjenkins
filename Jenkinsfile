@@ -10,7 +10,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Step 1: Clone the repository
-                git branch: 'main', url: ''
+                git branch: 'main', url: 'https://github.com/priyankasushma13/webhookjenkins.git'
             }
         }
 
